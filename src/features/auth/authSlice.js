@@ -1,37 +1,10 @@
-//? Documentation
 /**
- * This file handles user authentication using Redux Toolkit.
- *
- * It includes:
- * - Async actions for login and registration (using createAsyncThunk)
- * - A slice to manage auth state: user info, status, and errors
- * - A logout reducer to clear user data
- *
- * You can use:
- * - `login(credentials)` to log in
- * - `register(userData)` to register a new user
- * - `logout()` to log out the user
+ * This file defines the authentication slice using Redux Toolkit.
+ * It manages the authentication state (user, status, and error), and handles login, register, and logout actions.
  */
+import { createSlice } from "@reduxjs/toolkit";
+import { login, register } from "./authThunks";
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loginUser, registerUser } from "../../services/apiServices";
-
-// Async thunk for logging in a user
-export const login = createAsyncThunk("auth/login", async (credentials) => {
-  const response = await loginUser(credentials);
-  console.log(response);
-  return response.data;
-});
-
-// Async thunk for registering a new user
-export const register = createAsyncThunk("auth/register", async (userData) => {
-  const response = await registerUser(userData);
-  console.log(response);
-
-  return response.data;
-});
-
-// Redux slice for managing authentication state
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -40,14 +13,13 @@ const authSlice = createSlice({
     error: null,
   },
   reducers: {
-    // Reducer to handle user logout
-    logout(state) {
+    logout: (state) => {
       state.user = null;
     },
   },
   extraReducers: (builder) => {
+    // LOGIN
     builder
-      // Handle login request status updates
       .addCase(login.pending, (state) => {
         state.status = "loading";
       })
@@ -59,7 +31,8 @@ const authSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
-      // Handle registration
+
+      // REGISTER
       .addCase(register.pending, (state) => {
         state.status = "loading";
       })
@@ -70,7 +43,6 @@ const authSlice = createSlice({
       .addCase(register.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-        console.log(action);
       });
   },
 });

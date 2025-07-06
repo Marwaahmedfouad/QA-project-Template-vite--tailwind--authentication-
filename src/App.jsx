@@ -1,25 +1,22 @@
-import { useDispatch } from "react-redux";
-import { login } from "./features/auth/authSlice";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Login from "./pages/Auth/Login";
-import PageNotFound from "./pages/Auth/PageNotFound";
+import PageNotFound from "./features/auth/PageNotFound";
 import Layout from "./Layout";
-import Register from "./pages/Auth/Register";
-
+import Register from "./features/auth/Register";
+import Login from "./features/auth/components/Login";
+import NavigationMenu from "./globalComponents/NavigationMenu";
 export default function App() {
-  const dispatch = useDispatch();
-
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />} />
 
+          {/* AUTH */}
           <Route path="/login" element={<Login />} />
-
           <Route path="/register" element={<Register />} />
+          <Route path="/NavigationMenu" element={<NavigationMenu />} />
 
+          {/* Page Not Found */}
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
